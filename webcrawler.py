@@ -4,17 +4,26 @@ import re
 
 #formats the locations so that it can be added to the array
 def getJustHref(startPosit,theText):
-    endString = ""
+    #getting just the https link
+    midString = ""
     loop = True
-    speechSeen = False
+    speechSeen = 0
+    speech = '"'
     currentPos = startPosit
     while (loop == True):
-        if(theText[currentPos] == '>'):
-            loop = False
+      
+        if(theText[currentPos] == speech):
+            speechSeen += 1
+        if(speechSeen == 2):
+            loop = False 
         else:
-            endString += theText[currentPos]
+            midString += theText[currentPos]
             currentPos += 1
-    return(endString[8:len(endString)-1])
+
+    
+   
+
+    return(midString[8:len(midString)])
 
 
 
@@ -37,10 +46,22 @@ def addToArray(theArray,theLink):
     return(theArray)
 
 
-
+yourUrl = input("Input a URL to begin with")
 hrefArray = []
+x=0
 addToArray(hrefArray,'https://news.ycombinator.com/')
+while (len(hrefArray)<100):
+    try:
+        addToArray(hrefArray,hrefArray[x])
+    except:
+        #some links can be used by us but not by library 
+        print(hrefArray[x])
+        print("Not a fan of url")
+    x+=1
+
+
+
 for x in range(0, len(hrefArray)):
     print(hrefArray[x])
 
-
+print(len(hrefArray))
