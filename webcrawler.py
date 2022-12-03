@@ -1,8 +1,8 @@
 import urllib.request
 import re
 
-
-#formats the ahrefs so that it can be added to the array
+#tried to use re.finditer but was much slower
+# with a bbc link current code was 10sec but re.findter was 30 sec 
 def getJustHref(startPosit,theText):
     #getting just the https link
     midString = ""
@@ -14,7 +14,7 @@ def getJustHref(startPosit,theText):
     #once both speech marks have been found dont need to look further 
     #seems to work for most different formats of links on websites
     while (loop == True):  
-        #checks character by character
+        #checks character by character starting at the beginning of where a href was found
         if(theText[currentPos] == speech):
             speechSeen += 1
         if(speechSeen == 2):
@@ -28,7 +28,7 @@ def getJustHref(startPosit,theText):
 
 
 def addToArray(theArray,theLink):
-    #reads the website into varialbe
+    #reads the website into variable
     response = urllib.request.urlopen(theLink) 
     html = str(response.read())
     strToFind = 'a href="http'
@@ -46,7 +46,7 @@ def addToArray(theArray,theLink):
 
     return(theArray)
 
-print("Warning: Library struggles with certain websites")
+print("Warning: Library used does not allow certain websites")
 print("Example Format =  https://news.ycombinator.com")
 print("Example Format =  https://www.bbc.co.uk/news")
 yourUrl = input("Input a URL to begin: ")
@@ -73,5 +73,5 @@ while (len(hrefArray)<100):
 for x in range(0, len(hrefArray)):
     print(hrefArray[x])
 
-print(len(hrefArray))
+print(str(len(hrefArray))+ " links found")
 print(str(webPages) + " pages looked at")
